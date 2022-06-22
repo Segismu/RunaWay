@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -16,9 +17,9 @@ TagManager:
   - Player
   - Backgroud
   - Mobs
-  - 
-  - 
-  - 
+  - Traps
+  - Bullets
+  - Interactive
   - 
   - 
   - 
@@ -55,6 +56,15 @@ TagManager:
     locked: 0
   - name: Bouncer
     uniqueID: 3015291161
+    locked: 0
+  - name: Traps
+    uniqueID: 1115956067
+    locked: 0
+  - name: Bullets
+    uniqueID: 1610009741
+    locked: 0
+  - name: Interactive
+    uniqueID: 1464495451
     locked: 0
   - name: Mobs
     uniqueID: 2650043301

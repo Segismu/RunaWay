@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,13 +10,19 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float runSpeed = 10f;
     [SerializeField] float jumpSpeed = 5f;
     [SerializeField] float climbSpeed = 5f;
-
+    [SerializeField] Vector2 koKick = new Vector2 (10f, 10f);
+    [SerializeField] GameObject bullet;
+    [SerializeField] Transform handCannon;
+     
     Vector2 moveInput;
     Rigidbody2D myRigidbody;
     Animator myAnimator;
     CapsuleCollider2D myCapsuleCollider;
     BoxCollider2D myBoxCollider;
     float gravityScaleAtStart;
+    
+    bool isAlive = true;
+
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
@@ -27,19 +34,31 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (!isAlive) { return; }
         Run();
         FlipSprite();
         ClimbLadder();
+        Mortality();
     }
 
     void OnMove(InputValue value)
     {
+        if (!isAlive) { return; }
         moveInput = value.Get<Vector2>();
         Debug.Log(moveInput);
     }
 
+    void OnFire(InputValue value)
+    {
+        if (!isAlive) { return; }
+        Instantiate(bullet, handCannon.position, transform.rotation);
+    }
     void OnJump(InputValue value)
     {
+        if (!isAlive)
+        {
+            return;
+        }
         if (!myBoxCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             return;
@@ -86,5 +105,16 @@ public class PlayerMovement : MonoBehaviour
         
         myAnimator.SetBool("isClimbing", true);
 
+    }
+
+    void Mortality()
+    {
+        if (myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Mobs", "Traps")))
+        {
+            isAlive = false;
+            myAnimator.SetTrigger("KO");
+            myRigidbody.velocity = koKick;
+            FindObjectOfType<GameSession>().ProcessPlayerKO();
+        }
     }
 }
