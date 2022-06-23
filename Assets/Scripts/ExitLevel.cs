@@ -26,6 +26,7 @@ void OnTriggerEnter2D(Collider2D other)
             nextSceneIndex = 0;
         }
 
+        FindObjectOfType<LevelPersist>().ResetLevelPersist();
         SceneManager.LoadScene(nextSceneIndex);
     }
 }
